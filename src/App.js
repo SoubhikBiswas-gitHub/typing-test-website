@@ -1,23 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import TypingBox from './Components/TypingBox';
+import { GlobalStyles } from './styles/global';
+var randomWords = require('random-words');
 
 function App() {
+
+  const words = randomWords(50);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="canvas">
+      <GlobalStyles/>
+      <h1 className='heading' style={{"text-align":"center"}}>Typing Website</h1> 
+      <TypingBox words={words}/>
+      <h1 style={{"text-align":"center"}}>Footer</h1>
     </div>
   );
 }
