@@ -5,13 +5,11 @@ var randomWords = require('random-words');
 
 function App() {
 
-  const words = randomWords(50);
-
   return (
     <div className="canvas">
       <GlobalStyles/>
       <h1 className='heading' style={{"text-align":"center"}}>Typing Website</h1> 
-      <TypingBox words={words}/>
+      <TypingBox/>
       <h1 style={{"text-align":"center"}}>Footer</h1>
     </div>
   );

@@ -86,6 +86,32 @@ body{
     }
 }
 
+.upper-menu{
+    display: flex;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left:0.5rem;
+    justify-content: space-between;
+}
+
+.time-mode{
+    display: flex;
+}
+
+.time{
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+.time:hover{
+    color:red;
+    cursor:pointer;
+}
+
+.counter{
+    font-size: 20px;
+}
 
 
 `;

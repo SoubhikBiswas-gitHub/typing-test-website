@@ -1,13 +1,37 @@
-import { set } from 'lodash';
+import { random, set } from 'lodash';
 import React, { createRef, useEffect, useRef, useState } from 'react'
+import { useGameMode } from '../Context/GameModes';
+import UpperMenu from './UpperMenu';
+var randomWords = require('random-words');
 
-const TypingBox = ({words}) => {
+const TypingBox = () => {
 
     const [currWordIndex, setCurrWordIndex] = useState(0);
     const [currCharIndex, setCurrCharIndex] = useState(0);
+    const [countDown, setCountDown] = useState(5);
+    const [testStart, setTestStart] = useState(false);
+    const [testOver, setTestOver] = useState(false);
+    const [words,setWords] = useState([]);
+    const [wordSpanRef, setWordSpanRef] = useState([]);
+    const {gameTime} = useGameMode();
 
+    const resetGame = ()=>{
+        console.log("loop");
+        setCurrCharIndex(0);
+        setCurrWordIndex(0);
+        setCountDown(gameTime);
+        setTestStart(false);
+        setTestOver(false);
+        let random = randomWords(50);
+        setWords(random);
+        setWordSpanRef(Array(words.length).fill(0).map(i=>createRef()));
+    }
 
-    const wordSpanRef = Array(words.length).fill(0).map(i=>createRef());
+    useEffect(()=>{
+        resetGame();
+    },[gameTime]);
+
+    // const wordSpanRef = Array(words.length).fill(0).map(i=>createRef());
 
     // Array(5).fill(0) => [0 ,0, 0, 0, 0]
     // wordSpanRef[4] -> wordSpanRef[currWordIndex][currCharIndex]
@@ -16,16 +40,50 @@ const TypingBox = ({words}) => {
     // console.log(words);
     const textInputRef = useRef(null);
 
+
+    const startTimer = ()=>{
+
+        const intervalId = setInterval(timer, 1000);
+
+        function timer(){
+            console.log("works");
+            setCountDown((prevCountDown)=>{
+
+                if(prevCountDown===1){
+                    clearInterval(intervalId);
+                    setCountDown(0);
+                    setTestOver(true);             
+                }
+                else{
+                    return prevCountDown-1;
+                }
+               
+            });
+        }
+
+    }
+
+
+
     // console.log(textInputRef);
 
     const handleKeyDown = (e) =>{
         // console.log("down",e);
+
+        if(!testStart){
+            startTimer();
+            setTestStart(true);
+        }
 
         let allSpans = wordSpanRef[currWordIndex].current.querySelectorAll('span');
 
         // logic for space
         if(e.keyCode===32){
 
+            const incorrectChar = wordSpanRef[currWordIndex].current.querySelectorAll('.incorrect');
+            if(incorrectChar.length===0){
+                // correctWord+=1;
+            }
             if(allSpans.length<=currCharIndex){
                 allSpans[currCharIndex-1].className = allSpans[currCharIndex-1].className.replace("right","");
             }
@@ -94,6 +152,7 @@ const TypingBox = ({words}) => {
 
         if(key===currentCharacter){
             console.log("correct key pressed");
+
             wordSpanRef[currWordIndex].current.querySelectorAll('span')[currCharIndex].className = "char correct";
         }
         else{
@@ -117,32 +176,50 @@ const TypingBox = ({words}) => {
     const handleKeyUp = (e) =>{
         // console.log("up",e);
     }
+
     
     const focusInput = ()=>{
         textInputRef.current.focus();
     }
+
     useEffect(()=>{
+        let random = randomWords(50);
+        setWords(random);
+        setWordSpanRef(Array(words.length).fill(0).map(i=>createRef()));
         focusInput();
-        wordSpanRef[0].current.querySelectorAll('span')[0].className = 'char current';
     },[]);
 
-  return (
-    <>
-        <div className="type-box" onClick={focusInput}>
-            <div className="words">
+    useEffect(()=>{
+        if(wordSpanRef[0]){
+            wordSpanRef[0].current.querySelectorAll('span')[0].className = 'char current';
+        }
+        
+    },[wordSpanRef]);
 
-                {words.map((word,index)=>(
-                    <span className="word" ref={wordSpanRef[index]}>
-                        {word.split("").map((char,ind)=>(
-                            <span className="char">
-                                {char}
-                            </span>
-                        ))}      
-                    </span>
-                ))}
-                
-            </div>
-        </div>
+
+
+  return (
+    <div>
+
+            <UpperMenu countDown={countDown}/>
+
+          {!testOver ? (<div className="type-box" onClick={focusInput}>
+              <div className="words">
+
+                  {words.map((word, index) => (
+                      <span className="word" ref={wordSpanRef[index]}>
+                          {word.split("").map((char, ind) => (
+                              <span className="char">
+                                  {char}
+                              </span>
+                          ))}
+                      </span>
+                  ))}
+
+              </div>
+          </div>) : (<h1>Game Over</h1>)}
+
+        
 
         <input 
             type='text'
@@ -151,7 +228,7 @@ const TypingBox = ({words}) => {
             onKeyDown={(e)=> handleKeyDown(e)}
             onKeyUp={(e)=> handleKeyUp(e)}
             />
-    </>
+    </div>
   )
 }
 
