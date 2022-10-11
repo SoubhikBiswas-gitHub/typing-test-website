@@ -1,6 +1,8 @@
 import { random, set } from 'lodash';
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import React, { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useGameMode } from '../Context/GameModes';
+import CapsLockWarning from './CapsLockWarning';
+import Stats from './Stats';
 import UpperMenu from './UpperMenu';
 var randomWords = require('random-words');
 
@@ -11,9 +13,28 @@ const TypingBox = () => {
     const [countDown, setCountDown] = useState(5);
     const [testStart, setTestStart] = useState(false);
     const [testOver, setTestOver] = useState(false);
-    const [words,setWords] = useState([]);
-    const [wordSpanRef, setWordSpanRef] = useState([]);
+    const [capsLocked, setCapsLocked] = useState(false);
+    const [correctChar, setCorrectChar] = useState(0);
+    const [incorrectChar, setInCorrectChar] = useState(0);
+    const [missedChar, setMissedChar] = useState(0);
+    const [extraChar, setExtraChar] = useState(0);
+    const [correctWords, setCorrectWords] = useState(0);
+    const [graphData, setGraphData] = useState([]);
+    const [wordsArray, setWordsArray] = useState(()=>{
+        return randomWords(50);
+    });
+    const [intervalId,setIntervalId] = useState(null);
+    const words = useMemo(()=>{
+        return wordsArray;
+    },[wordsArray]);
+    
+    const wordSpanRef = useMemo(()=>{
+        return Array(words.length).fill(0).map(i=>createRef());
+    }, [words]);
+    
     const {gameTime} = useGameMode();
+
+    
 
     const resetGame = ()=>{
         console.log("loop");
@@ -22,9 +43,16 @@ const TypingBox = () => {
         setCountDown(gameTime);
         setTestStart(false);
         setTestOver(false);
+        clearInterval(intervalId);
         let random = randomWords(50);
-        setWords(random);
-        setWordSpanRef(Array(words.length).fill(0).map(i=>createRef()));
+        setWordsArray(random);
+        setCorrectChar(0);
+        setInCorrectChar(0);
+        setCorrectWords(0);
+        setExtraChar(0);
+        setMissedChar(0);
+        setGraphData([]);
+        focusInput();
     }
 
     useEffect(()=>{
@@ -44,10 +72,19 @@ const TypingBox = () => {
     const startTimer = ()=>{
 
         const intervalId = setInterval(timer, 1000);
-
+        setIntervalId(intervalId);
         function timer(){
             console.log("works");
             setCountDown((prevCountDown)=>{
+                console.log("prevcount", prevCountDown);
+                setCorrectChar((correctChar)=>{
+                    console.log("correctchar",correctChar);
+                    setGraphData((data)=>{
+                        return [...data,[gameTime-prevCountDown,Math.round((correctChar/5)/((gameTime-prevCountDown+1)/60))]];
+                    })
+                    return correctChar;
+                });
+                
 
                 if(prevCountDown===1){
                     clearInterval(intervalId);
@@ -63,12 +100,21 @@ const TypingBox = () => {
 
     }
 
+    const calculateWPM = ()=>{
+        return Math.round((correctChar/5)/(gameTime/60));
+    }
+
+    const calculateAccuracy = ()=>{
+        return Math.round((correctWords/currWordIndex)*100);
+    }
 
 
     // console.log(textInputRef);
 
     const handleKeyDown = (e) =>{
         // console.log("down",e);
+
+        setCapsLocked(e.getModifierState("CapsLock"));
 
         if(!testStart){
             startTimer();
@@ -80,9 +126,11 @@ const TypingBox = () => {
         // logic for space
         if(e.keyCode===32){
 
+            const correctChar = wordSpanRef[currWordIndex].current.querySelectorAll('.correct');
             const incorrectChar = wordSpanRef[currWordIndex].current.querySelectorAll('.incorrect');
-            if(incorrectChar.length===0){
-                // correctWord+=1;
+            setMissedChar(missedChar+ (allSpans.length-incorrectChar.length-correctChar.length));
+            if(correctChar.length===allSpans.length){
+                setCorrectWords(correctWords+1);
             }
             if(allSpans.length<=currCharIndex){
                 allSpans[currCharIndex-1].className = allSpans[currCharIndex-1].className.replace("right","");
@@ -133,6 +181,7 @@ const TypingBox = () => {
             let newSpan = document.createElement('span'); // -> <span></span>
             newSpan.innerText = e.key;
             newSpan.className = 'char incorrect right extra';
+            setExtraChar(extraChar+1);
             allSpans[currCharIndex-1].className = allSpans[currCharIndex-1].className.replace("right","");
 
             wordSpanRef[currWordIndex].current.append(newSpan);
@@ -152,10 +201,11 @@ const TypingBox = () => {
 
         if(key===currentCharacter){
             console.log("correct key pressed");
-
+            setCorrectChar(correctChar+1);
             wordSpanRef[currWordIndex].current.querySelectorAll('span')[currCharIndex].className = "char correct";
         }
         else{
+            setInCorrectChar(incorrectChar+1);
             console.log("incorrect key pressed");
             wordSpanRef[currWordIndex].current.querySelectorAll('span')[currCharIndex].className = "char incorrect";
         }
@@ -183,13 +233,23 @@ const TypingBox = () => {
     }
 
     useEffect(()=>{
-        let random = randomWords(50);
-        setWords(random);
-        setWordSpanRef(Array(words.length).fill(0).map(i=>createRef()));
         focusInput();
+
+        return ()=>{
+            clearInterval(intervalId);
+        }
     },[]);
 
     useEffect(()=>{
+        // console.log(wordSpanRef);
+
+        wordSpanRef.map(i=>{
+
+            Array.from(i.current.childNodes).map(ii=>{
+                ii.className = 'char';
+            })
+        })
+
         if(wordSpanRef[0]){
             wordSpanRef[0].current.querySelectorAll('span')[0].className = 'char current';
         }
@@ -200,7 +260,7 @@ const TypingBox = () => {
 
   return (
     <div>
-
+            <CapsLockWarning open={capsLocked}/>
             <UpperMenu countDown={countDown}/>
 
           {!testOver ? (<div className="type-box" onClick={focusInput}>
@@ -217,7 +277,14 @@ const TypingBox = () => {
                   ))}
 
               </div>
-          </div>) : (<h1>Game Over</h1>)}
+          </div>) : (<Stats 
+                        wpm={calculateWPM()} 
+                        accuracy={calculateAccuracy()} 
+                        correctChars={correctChar} 
+                        incorrectChars={incorrectChar} 
+                        extraChars={extraChar} 
+                        missedChars={missedChar} 
+                        graphData={graphData}/>)}
 
         
 

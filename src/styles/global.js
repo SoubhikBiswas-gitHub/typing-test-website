@@ -91,8 +91,9 @@ body{
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
-    padding-left:0.5rem;
+    // padding-left:0.5rem;
     justify-content: space-between;
+    padding:1rem;
 }
 
 .time-mode{
@@ -113,5 +114,32 @@ body{
     font-size: 20px;
 }
 
+.stats-box{
+    display:flex;
+    max-width:1000px;
+    height:auto;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+}
+
+.left-stats{
+    padding:30px;
+    width:30%;
+}
+
+.title{
+    font-size: 20px;
+    color: grey;
+}
+
+.subtitle{
+    font-size: 30px;
+    color: gold;
+}
+
+.right-stats{
+    width:70%;
+}
 
 `;
