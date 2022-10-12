@@ -16,7 +16,7 @@ body{
     height:100%;
     width:100%;
     background:black;
-    color:#fff;
+    color:white;
     padding:0;
     margin:0;
     transition: all 0.25s linear;
@@ -140,6 +140,24 @@ body{
 
 .right-stats{
     width:70%;
+}
+
+.footer{
+    display: flex;
+    width: 1000px;
+    height: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-between
+}
+
+.theme-options{
+    background:red;
+    min-width: 100px;
+}
+.select{
+    color: #fff,
+    min-width: 90px
 }
 
 `;
