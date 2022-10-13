@@ -6,7 +6,8 @@ import Stats from './Stats';
 import UpperMenu from './UpperMenu';
 var randomWords = require('random-words');
 
-const TypingBox = () => {
+const TypingBox = (props) => {
+    console.log(props);
 
     const [currWordIndex, setCurrWordIndex] = useState(0);
     const [currCharIndex, setCurrCharIndex] = useState(0);

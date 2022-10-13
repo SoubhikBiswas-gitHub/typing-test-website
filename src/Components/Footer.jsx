@@ -1,9 +1,8 @@
-import { Select } from '@material-ui/core'
 import { MenuItem } from '@mui/material'
 import React from 'react'
+import Select from 'react-select'
 import { useTheme } from '../Context/ThemeContext'
 import { themeOptions } from '../styles/theme'
-
 
 
 const Footer = () => {
@@ -15,11 +14,12 @@ const Footer = () => {
     }
     const handleThemeChange = (e)=>{
         console.log("works");
-        if(!e.target.value){
-            return;
-        }
-        console.log(e.target.value);
-        setTheme(e.target.value);
+        // if(!e.target.value){
+        //     return;
+        // }
+        console.log(e.value);
+        // console.log(e.target.data['value']);
+        setTheme(e.value);
     }
 
     console.log(themeOptions)
@@ -29,18 +29,20 @@ const Footer = () => {
             Links
         </div>   
         <div className="theme-options">
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={3}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
+
+
+            <Select
+            options={themeOptions}
+            menuPlacement='top'
+            onChange={handleThemeChange}
+            defaultValue={themeOptions[0]}
+            >
+
+            </Select>
+
+
             {/* <Select 
+            sx={{minWidth:30}}
             className='select'
             label="options"
             value=''
@@ -51,6 +53,7 @@ const Footer = () => {
                 <MenuItem value={i.value}>{i.label}</MenuItem>
             ))}
             </Select> */}
+
         </div> 
 
     </div>

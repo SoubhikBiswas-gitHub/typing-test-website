@@ -1,7 +1,8 @@
 import {createGlobalStyle} from 'styled-components';
 
 
-export const GlobalStyles = createGlobalStyle`
+
+const GlobalStyles = createGlobalStyle`
 
 *,
 *::after,
@@ -15,8 +16,8 @@ body{
     justify-content:center;
     height:100%;
     width:100%;
-    background:black;
-    color:white;
+    background: ${ ({theme})=> theme.background } ;
+    color: ${ ({theme})=> theme.color } ;
     padding:0;
     margin:0;
     transition: all 0.25s linear;
@@ -152,12 +153,15 @@ body{
 }
 
 .theme-options{
-    background:red;
-    min-width: 100px;
+    background:transparent;
+    min-width: 200px;
+    align-items: "center"
 }
 .select{
-    color: #fff,
+    color: black,
     min-width: 90px
 }
 
 `;
+
+export default GlobalStyles;

@@ -9,9 +9,15 @@ const lightTheme = {
     color: "black"
 }
 
+const redTheme = {
+    background: "red",
+    color:"blue"
+}
+
 export const themeOptions = [
     {value: darkTheme, label:"Dark"},
-    {value: lightTheme, label: "Light"}
+    {value: lightTheme, label: "Light"},
+    {value: redTheme, label:"Red Theme"}
 ];
 
 
