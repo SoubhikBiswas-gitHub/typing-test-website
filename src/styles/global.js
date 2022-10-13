@@ -143,6 +143,15 @@ body{
     width:70%;
 }
 
+.header{
+    display: flex;
+    width: 1000px;
+    height: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-between
+}
+
 .footer{
     display: flex;
     width: 1000px;

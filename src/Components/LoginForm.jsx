@@ -2,33 +2,28 @@ import { Box, Button, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { auth } from '../firebaseConfig';
 
-const SignUpForm = ({handleClose}) => {
+const LoginForm = ({handleClose}) => {
+
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleSubmit = ()=>{
-        if(!email || !password || !confirmPassword){
+
+    const handleSubmit = () =>{
+        if(!email || !password){
             alert("fill all the details");
             return;
         }
-        if(password!==confirmPassword){
-            alert("Password Mismatch");
-            return;
-        }
-        auth.createUserWithEmailAndPassword(email,password).then((ok)=>{
-            alert("account created");
-            handleClose();
-        }).catch((err)=>{
-            alert("Not able to create account");
-        });
 
-        
+        auth.signInWithEmailAndPassword(email,password).then((ok)=>{
+            alert("logged in");
+            handleClose();
+        });
     }
 
+
   return (
-    <Box
+        <Box
      p={3}
      style={{
         padding:10,
@@ -48,23 +43,14 @@ const SignUpForm = ({handleClose}) => {
         variant="outlined"
         type="password"
         label="Enter Password"
-        onChange={(e)=> setPassword(e.target.value)}>
-
-        </TextField>
-        <TextField
-        variant="outlined"
-        type="password"
-        label="Confirm Password"
-        onChange={(e)=> setConfirmPassword(e.target.value)}>
-
-        </TextField>
+        onChange={(e)=> setPassword(e.target.value)}/>
 
         <Button
         variant="contained"
         size="large"
         style={{backgroundColor:"red"}}
         onClick = {handleSubmit}>
-            Sign Up
+            Login
 
         </Button>
 
@@ -72,4 +58,4 @@ const SignUpForm = ({handleClose}) => {
   )
 }
 
-export default SignUpForm
+export default LoginForm
