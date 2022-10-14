@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { auth, db } from '../firebaseConfig';
 import Graph from './Graph'
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Stats = ({wpm, accuracy, correctChars, incorrectChars, extraChars, missedChars, graphData}) => {
 
@@ -11,6 +13,23 @@ const Stats = ({wpm, accuracy, correctChars, incorrectChars, extraChars, missedC
             return i;
         }
     });
+    const [user] = useAuthState(auth);
+    const pushStatsToDb = async()=>{
+        const resultsRef = db.collection('results');
+        const {uid} = auth.currentUser
+        await resultsRef.add({
+            userId: uid,
+            wpm: wpm,
+            accuracy: accuracy,
+            characters: `${correctChars}/${incorrectChars}/${extraChars}/${missedChars}`,
+            timeStamp: new Date()
+        });
+    }
+    useEffect(()=>{
+        if(user){
+            pushStatsToDb();
+        }
+    },[]);
 
     console.log("new graph",newGraph);
 

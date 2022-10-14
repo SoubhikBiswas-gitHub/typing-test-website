@@ -1,3 +1,4 @@
+import { Dialog, DialogTitle } from '@material-ui/core';
 import { random, set } from 'lodash';
 import React, { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useGameMode } from '../Context/GameModes';
@@ -21,6 +22,7 @@ const TypingBox = (props) => {
     const [extraChar, setExtraChar] = useState(0);
     const [correctWords, setCorrectWords] = useState(0);
     const [graphData, setGraphData] = useState([]);
+    const [openDialog, setOpenDialog] = useState(false);
     const [wordsArray, setWordsArray] = useState(()=>{
         return randomWords(50);
     });
@@ -35,7 +37,42 @@ const TypingBox = (props) => {
     
     const {gameTime} = useGameMode();
 
-    
+    const handleDialogEvents = (e)=>{
+        
+        if(e.keyCode === 13 || e.keyCode===9){
+            e.preventDefault();
+            setOpenDialog(false);
+            resetGame();
+            return;   
+        }
+        if(e.keyCode===32){
+            e.preventDefault();
+            setOpenDialog(false);
+            redoGame();
+            return;
+        }
+        e.preventDefault();
+        setOpenDialog(false);
+        focusInput();
+        startTimer();
+    }
+
+    const redoGame = () =>{
+        setCurrCharIndex(0);
+        setCurrWordIndex(0);
+        setCountDown(gameTime);
+        setTestStart(false);
+        setTestOver(false);
+        clearInterval(intervalId);
+        resetWordSpanRef();
+        setCorrectChar(0);
+        setInCorrectChar(0);
+        setCorrectWords(0);
+        setExtraChar(0);
+        setMissedChar(0);
+        setGraphData([]);
+        focusInput();
+    }
 
     const resetGame = ()=>{
         console.log("loop");
@@ -114,6 +151,17 @@ const TypingBox = (props) => {
 
     const handleKeyDown = (e) =>{
         // console.log("down",e);
+
+        //logic for tab
+        if(e.keyCode===9){
+
+            if(testStart){
+                clearInterval(intervalId);
+            }
+            e.preventDefault();
+            setOpenDialog(true);
+            return;
+        }
 
         setCapsLocked(e.getModifierState("CapsLock"));
 
@@ -222,6 +270,19 @@ const TypingBox = (props) => {
 
 
     }
+
+    const resetWordSpanRef = () =>{
+        wordSpanRef.map(i=>{
+
+            Array.from(i.current.childNodes).map(ii=>{
+                ii.className = 'char';
+            })
+        })
+
+        if(wordSpanRef[0]){
+            wordSpanRef[0].current.querySelectorAll('span')[0].className = 'char current';
+        }
+    }
     
 
     const handleKeyUp = (e) =>{
@@ -244,16 +305,7 @@ const TypingBox = (props) => {
     useEffect(()=>{
         // console.log(wordSpanRef);
 
-        wordSpanRef.map(i=>{
-
-            Array.from(i.current.childNodes).map(ii=>{
-                ii.className = 'char';
-            })
-        })
-
-        if(wordSpanRef[0]){
-            wordSpanRef[0].current.querySelectorAll('span')[0].className = 'char current';
-        }
+        resetWordSpanRef();
         
     },[wordSpanRef]);
 
@@ -296,6 +348,25 @@ const TypingBox = (props) => {
             onKeyDown={(e)=> handleKeyDown(e)}
             onKeyUp={(e)=> handleKeyUp(e)}
             />
+
+        <Dialog
+            open={openDialog}
+            onKeyDown={handleDialogEvents}
+        >
+            <DialogTitle>
+                <div>
+                    press Space to redo
+                </div>
+                <div>
+                    press Tab/Enter to restart
+                </div>
+                <div>
+                    press any other key to exit
+                </div>
+            </DialogTitle>
+
+        </Dialog>
+        
     </div>
   )
 }

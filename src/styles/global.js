@@ -17,7 +17,7 @@ body{
     height:100%;
     width:100%;
     background: ${ ({theme})=> theme.background } ;
-    color: ${ ({theme})=> theme.color } ;
+    color: ${ ({theme})=> theme.title } ;
     padding:0;
     margin:0;
     transition: all 0.25s linear;
@@ -47,6 +47,7 @@ body{
     flex-wrap:wrap;
     align-content:center;
     width:100%;
+    color: ${ ({theme})=> theme.typeBoxText}
 }
 .word{
     margin:5px 5px;
@@ -57,7 +58,7 @@ body{
     opacity:0
 }
 .char.correct{
-    color:green;
+    color: ${ ({theme})=> theme.title };
 }
 .char.incorrect{
     color:red;
@@ -67,11 +68,11 @@ body{
     animation: blinking 2s infinite;
     animation-timing-function: ease;
     @keyframes blinking{
-        0% {border-left-color:#fff;}
-        25% {border-left-color:black;}
-        50% {border-left-color:#fff;}
-        75% {border-left-color:black;}
-        100% {border-left-color:#fff;}
+        0% {border-left-color:${ ({theme})=> theme.title };}
+        25% {border-left-color:${ ({theme})=> theme.background };}
+        50% {border-left-color:${ ({theme})=> theme.title };}
+        75% {border-left-color:${ ({theme})=> theme.background };}
+        100% {border-left-color:${ ({theme})=> theme.title };}
     }
 }
 .right{
@@ -79,11 +80,11 @@ body{
     animation: blinkingRight 2s infinite;
     animation-timing-function: ease;
     @keyframes blinkingRight{
-        0% {border-right-color:#fff;}
-        25% {border-right-color:black;}
-        50% {border-right-color:#fff;}
-        75% {border-right-color:black;}
-        100% {border-right-color:#fff;}
+        0% {border-right-color:${ ({theme})=> theme.title };}
+        25% {border-right-color:${ ({theme})=> theme.background };}
+        50% {border-right-color:${ ({theme})=> theme.title };}
+        75% {border-right-color:${ ({theme})=> theme.background };}
+        100% {border-right-color:${ ({theme})=> theme.title };}
     }
 }
 
@@ -95,6 +96,7 @@ body{
     // padding-left:0.5rem;
     justify-content: space-between;
     padding:1rem;
+    color: ${ ({theme})=> theme.typeBoxText}
 }
 
 .time-mode{
@@ -107,7 +109,7 @@ body{
 }
 
 .time:hover{
-    color:red;
+    color:${ ({theme})=> theme.title };
     cursor:pointer;
 }
 
@@ -131,12 +133,12 @@ body{
 
 .title{
     font-size: 20px;
-    color: grey;
+    color: ${ ({theme})=> theme.typeBoxText };
 }
 
 .subtitle{
     font-size: 30px;
-    color: gold;
+    color: ${ ({theme})=> theme.title };
 }
 
 .right-stats{

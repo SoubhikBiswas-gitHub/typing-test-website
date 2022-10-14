@@ -1,18 +1,18 @@
 import { createContext, useContext, useState } from "react";
+import { themeOptions } from "../styles/theme";
 
 
 const ThemeContext =createContext();
 
 export const ThemeContextProvider = ({children})=>{
-    
-    const [theme, setTheme] = useState({
-        background: "black",
-        color: "white"
-    });
-
+    console.log(themeOptions);
+    const defaultTheme = JSON.parse(localStorage.getItem('theme')) || themeOptions[3].value;
+    const [theme, setTheme] = useState(defaultTheme);
+    console.log(defaultTheme);
     const values = {
         theme,
-        setTheme
+        setTheme,
+        defaultTheme
     }
 
     return (<ThemeContext.Provider value = {values}>{children}</ThemeContext.Provider>);
