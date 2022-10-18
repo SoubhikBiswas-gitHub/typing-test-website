@@ -13,11 +13,16 @@ const UserPage = () => {
   const [data, setData] = useState([]);
   const [graphData, setGraphData] = useState([]);
   const [user, loading] = useAuthState(auth);
+  const [dataLoading, setDataLoading] = useState(true);
   const {theme} = useTheme();
+  const [joinedAt, setJoinedAt] = useState();
   const fetchUserData = () => {
 
     if (!loading) {
       console.log(user);
+      setJoinedAt(new Date(user.metadata.creationTime).toISOString().split('T')[0]);
+      console.log(new Date(user.metadata.creationTime).toISOString());
+      console.log("sdsd",joinedAt);
       const { uid } = auth.currentUser;
       const resultRef = db.collection('results');
       let tempData = [];
@@ -29,6 +34,7 @@ const UserPage = () => {
         });
         setData(tempData);
         setGraphData(tempGraphData);
+        setDataLoading(false);
       });
     }
 
@@ -38,89 +44,95 @@ const UserPage = () => {
     fetchUserData();
   }, [loading]);
 
-  if (loading) {
-    return (<CircularProgress size={200}/>)
+  if (loading || dataLoading) {
+    return (
+      <div className='central-screen'>
+        <CircularProgress size={150} color={theme.title}/>
+      </div>
+    )
   }
 
   return (
     
     <div className='canvas'>
       <Header/>
-      <div className="central-data">
-      <div className='user-profile'>
-      
-      <div className="user">
-          <div className="picture">
-            <AccountCircleIcon style={{display:'block',transform:'scale(6)'}}/>
-          </div>
-          <div className="info">
-            <div className="email">
-              {user.email}
-            </div>
-            <div className="joined-on">
-              {user.metadata.creationTime}
-            </div>
+      {/* <div className="central-data"> */}
+            <div className='user-profile'>
             
+              <div className="user">
+                  <div className="picture">
+                    <AccountCircleIcon style={{display:'block',transform:'scale(6)', margin:'auto', marginTop:'3rem'}}/>
+                  </div>
+                  <div className="info">
+                    <div className="email">
+                      {user.email}
+                    </div>
+                    <div className="joined-on">
+                      joined {joinedAt}
+                    </div>
+                    
+                  </div>
+              </div>
+            <div className="total-times">
+              <span>
+                Total Test Taken - {data.length}
+              </span>
+            </div>
           </div>
-      </div>
-      <div className="total-times">
-         Total Test Taken - {data.length}
-      </div>
-    </div>
-    
-    <div className="result-graph">
-      <Graph graphData={graphData} type='date'/>
-    </div>
+          
+          <div className="result-graph">
+            <Graph graphData={graphData} type='date'/>
+          </div>
 
-    <div className='table'>
-      <TableContainer style={{maxHeight:'30rem'}}>
-        <Table>
-          <TableHead >
-            <TableRow>
-              <TableCell style={{color:theme.title}}>
-                WPM
-              </TableCell>
-              <TableCell style={{color:theme.title}}>
-                Accuracy
-              </TableCell>
-              <TableCell style={{color:theme.title}}>
-                Characters
-              </TableCell>
-              <TableCell style={{color:theme.title, textAlign:'center'}}>
-                Date
-              </TableCell>
-            </TableRow>
-          </TableHead>
+          <div className='table'>
+            <TableContainer style={{maxHeight:'30rem'}}>
+              <Table>
+                <TableHead >
+                  <TableRow>
+                    <TableCell style={{color:theme.title, textAlign:'center'}}>
+                      WPM
+                    </TableCell>
+                    <TableCell style={{color:theme.title, textAlign:'center'}}>
+                      Accuracy
+                    </TableCell>
+                    <TableCell style={{color:theme.title, textAlign:'center'}}>
+                      Characters
+                    </TableCell>
+                    <TableCell style={{color:theme.title, textAlign:'center'}}>
+                      Date
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
 
-          <TableBody>
-            {data.map(i => {
-              return (
-                <TableRow>
-                  <TableCell style={{color:theme.title}}>
-                    {i.wpm}
-                  </TableCell>
-                  <TableCell style={{color:theme.title}}>
-                    {i.accuracy}
-                  </TableCell>
-                  <TableCell style={{color:theme.title}}>
-                    {i.characters}
-                  </TableCell>
-                  <TableCell style={{color:theme.title}}>
-                    {i.timeStamp.toDate().toString()}
-                  </TableCell>
-                </TableRow>
-              )
-            })}
+                <TableBody>
+                  {data.map(i => {
+                    return (
+                      <TableRow>
+                        <TableCell style={{color:theme.title, textAlign:'center'}}>
+                          {i.wpm}
+                        </TableCell>
+                        <TableCell style={{color:theme.title, textAlign:'center'}}>
+                          {i.accuracy}
+                        </TableCell>
+                        <TableCell style={{color:theme.title, textAlign:'center'}}>
+                          {i.characters}
+                        </TableCell>
+                        <TableCell style={{color:theme.title, textAlign:'center'}}>
+                          {i.timeStamp.toDate().toLocaleString()}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
 
-          </TableBody>
+                </TableBody>
 
 
-        </Table>
-      </TableContainer>
-    </div>
+              </Table>
+            </TableContainer>
+          </div>
 
 
-      </div>
+      {/* </div> */}
     
           
     <Footer/>

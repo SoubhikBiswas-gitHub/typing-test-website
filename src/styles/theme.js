@@ -35,12 +35,21 @@ const futureFunkTheme = {
     stats: "#fff"
 }
 
+const aetherTheme = {
+    label: "Aether",
+    background: "#101820",
+    title: "#EEDAEA",
+    typeBoxText: "#CF6BDD",
+    stats: "#EEDAEA"
+}
+
 export const themeOptions = [
     {value: darkTheme, label:"Dark"},
     {value: lightTheme, label: "Light"},
     {value: redTheme, label:"Red Theme"},
     {value: bentoTheme, label: "Bento"},
-    {value: futureFunkTheme, label: "Future Funk"}
+    {value: futureFunkTheme, label: "Future Funk"},
+    {value: aetherTheme, label: "Aether"}
 ];
 
 

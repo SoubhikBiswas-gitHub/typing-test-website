@@ -21,11 +21,16 @@ body{
     padding:0;
     margin:0;
     transition: all 0.25s linear;
+    overflow-y: scroll;
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
 .canvas{
     align-items:center;
     display:grid;
-    gap:0.5rem;
+    gap:2rem;
     grid-auto-flow: row;
     grid-template-row: auto 1fr auto;
     min-height: 100vh;
@@ -163,9 +168,11 @@ body{
     display: flex;
     width: 1000px;
     height: 60px;
+    margin-top: 2rem;
     margin-left: auto;
     margin-right: auto;
-    justify-content: space-between
+    align-self: stretch;
+    justify-content: space-between;
 }
 
 .footer{
@@ -174,7 +181,8 @@ body{
     height: 60px;
     margin-left: auto;
     margin-right: auto;
-    justify-content: space-between
+    align-self: end;
+    justify-content: space-between;
 }
 
 .theme-options{
@@ -198,6 +206,8 @@ body{
 }
 
 .user-profile{
+    width:1000px;
+    margin:auto;
     display:flex;
     min-height:15rem;
     background:  ${ ({theme})=> theme.typeBoxText };
@@ -210,28 +220,54 @@ body{
     justify-content:center;
     margin-top:30px;
     margin-bottom:30px;
-    padding:3rem;
+    padding:1rem;
     border-right: 2px solid
 
 }
 
-.total-times{
-    width:50%;
-    padding:3rem;
+.result-graph, .table{
+    width:1000px;
+    margin:auto;
 }
 
+
+
 .picture{
+    position:relative;
     width:50%;
+    min-height:5rem;
+    min-width:5rem;
 }
 .info{
     width:50%;
+    margin-top:1rem;
+    text-align:center;
+    padding:1rem;
+    font-size:1.5rem;
 }
 
 .central-data{
-    max-width:1000px;
+    width:1000px;
     margin: auto;
     margin-top:2rem;
     margin-bottom: 3rem;
+}
+
+.total-times{
+    width:50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size:3rem;
+}
+
+
+.central-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
 }
 
 a{ 

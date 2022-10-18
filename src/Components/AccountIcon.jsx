@@ -110,7 +110,7 @@ const AccountIcon = () => {
 
     return (
         <div>
-            <AccountCircleIcon onClick={handleAccountClick} style={{marginRight:'0.5rem'}} />
+            <AccountCircleIcon onClick={handleAccountClick} style={{marginTop:'20px', marginRight:'0.5rem'}} />
             {user && <LogoutIcon onClick={logout} />}
             <Modal
                 open={open}

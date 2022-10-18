@@ -10,14 +10,13 @@ const Header = () => {
   return (
     <div className='header'>
       <Link to='/'>
-        <div className="logo" style={{cursor:'pointer'}}>
-            Logo
+        <div className="logo" style={{cursor:'pointer', fontSize:'2rem'}}>
+            Typo
         </div>
       </Link>
       
         <div className="icons">
             <AccountIcon/>
-
         </div>
 
     </div>

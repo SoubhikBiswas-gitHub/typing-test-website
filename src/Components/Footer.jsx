@@ -36,7 +36,8 @@ const Footer = () => {
                 onChange={handleThemeChange}
                 defaultValue={{label:defaultTheme.label,value:defaultTheme}}
                 styles={{
-                    control: (styles) => ({...styles,backgroundColor:theme.background}),
+                    control: (styles) => ({...styles,backgroundColor:theme.background, cursor:'pointer', borderColor:theme.title}),
+                    singleValue: (styles) => ({...styles, color:theme.title}),
                     menu: styles => ({...styles,backgroundColor:theme.background})
                 }}
             />
