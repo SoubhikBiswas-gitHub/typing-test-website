@@ -3,6 +3,7 @@ import React from 'react'
 import Select from 'react-select'
 import { useTheme } from '../Context/ThemeContext'
 import { themeOptions } from '../styles/theme'
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 
 const Footer = () => {
@@ -22,8 +23,10 @@ const Footer = () => {
     console.log(themeOptions)
   return (
     <div className='footer'>
-        <div className="footer-links">
-            Links
+        <div className="footer-links" >
+            <a href='https://github.com/utkarsh-dubey/typing-test-website' target="_blank">
+                <GitHubIcon />
+            </a>
         </div>   
         <div className="theme-options">
 

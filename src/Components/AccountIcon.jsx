@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
     },
     box: {
         width: 400,
-        alignItems: 'center'
+        textAlign: 'center'
     }
 
 }));
@@ -142,7 +142,7 @@ const AccountIcon = () => {
                     <Box className={classes.box}>
                         <span>OR</span>
                         <GoogleButton
-                        style={{width:'100%'}}
+                        style={{width:'100%',marginTop:'1rem'}}
                         onClick = {signInWithGoogle}/>
                     </Box>
 

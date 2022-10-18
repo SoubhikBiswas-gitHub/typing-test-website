@@ -1,17 +1,20 @@
 import { Modal } from '@mui/material'
 import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import AccountIcon from './AccountIcon'
 
 const Header = () => {
 
-    
+  const navigate = useNavigate();
 
   return (
     <div className='header'>
-        <div className="logo">
+      <Link to='/'>
+        <div className="logo" style={{cursor:'pointer'}}>
             Logo
         </div>
-
+      </Link>
+      
         <div className="icons">
             <AccountIcon/>
 

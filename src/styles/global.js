@@ -197,8 +197,47 @@ body{
 
 }
 
+.user-profile{
+    display:flex;
+    min-height:15rem;
+    background:  ${ ({theme})=> theme.typeBoxText };
+    border-radius: 30px;
+}
 
+.user{
+    display:flex;
+    width:50%;
+    justify-content:center;
+    margin-top:30px;
+    margin-bottom:30px;
+    padding:3rem;
+    border-right: 2px solid
 
+}
+
+.total-times{
+    width:50%;
+    padding:3rem;
+}
+
+.picture{
+    width:50%;
+}
+.info{
+    width:50%;
+}
+
+.central-data{
+    max-width:1000px;
+    margin: auto;
+    margin-top:2rem;
+    margin-bottom: 3rem;
+}
+
+a{ 
+    color: inherit; 
+    text-decoration: none;
+} 
 `;
 
 export default GlobalStyles;
