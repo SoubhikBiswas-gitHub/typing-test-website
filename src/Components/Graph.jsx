@@ -22,11 +22,11 @@ ChartJS.register(
     Legend
 );
 
-const Graph = ({graphData}) => {
+const Graph = ({graphData, type}) => {
 
     const {theme} = useTheme();
 
-
+    // [[0,0],[0,0]]
 
   return (
     <div>
@@ -34,7 +34,7 @@ const Graph = ({graphData}) => {
 
         data={
             {
-                labels: graphData.map(i=>i[0]+1)   ,
+                labels: graphData.map(i=>(type==='date')?(""):(i[0]+1))   ,
                 datasets: [
                     {
                         data: graphData.map(i=>i[1]),

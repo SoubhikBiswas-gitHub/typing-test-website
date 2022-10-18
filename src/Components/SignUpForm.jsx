@@ -1,5 +1,7 @@
 import { Box, Button, TextField } from '@mui/material'
 import React, { useState } from 'react'
+import { useAlert } from '../Context/AlertContext';
+import { useTheme } from '../Context/ThemeContext';
 import { auth } from '../firebaseConfig';
 
 const SignUpForm = ({handleClose}) => {
@@ -7,21 +9,68 @@ const SignUpForm = ({handleClose}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
+    const {theme} = useTheme();
+    const {setAlert} = useAlert();
     const handleSubmit = ()=>{
         if(!email || !password || !confirmPassword){
-            alert("fill all the details");
+            setAlert({
+                open: true,
+                type: 'warning',
+                message: 'fill all details'
+            });
+            setTimeout(()=>{
+                setAlert({
+                    open:false,
+                    type: "",
+                    message: ""
+                })
+            },2000);;
+            return;
             return;
         }
         if(password!==confirmPassword){
-            alert("Password Mismatch");
+            setAlert({
+                open: true,
+                type: 'warning',
+                message: 'password mismatch'
+            });
+            setTimeout(()=>{
+                setAlert({
+                    open:false,
+                    type: "",
+                    message: ""
+                })
+            },2000);;
+            return;
             return;
         }
         auth.createUserWithEmailAndPassword(email,password).then((ok)=>{
-            alert("account created");
+            setAlert({
+                open: true,
+                type: 'success',
+                message: 'signed in'
+            });
+            setTimeout(()=>{
+                setAlert({
+                    open:false,
+                    type: "",
+                    message: ""
+                })
+            },2000);
             handleClose();
         }).catch((err)=>{
-            alert("Not able to create account");
+            setAlert({
+                open: true,
+                type: 'error',
+                message: 'not able to sign in'
+            });
+            setTimeout(()=>{
+                setAlert({
+                    open:false,
+                    type: "",
+                    message: ""
+                })
+            },2000);
         });
 
         
@@ -35,12 +84,21 @@ const SignUpForm = ({handleClose}) => {
         display:"flex",
         flexDirection:"column",
         gap:"20px",
-        backgroundColor:"white"
      }}>
         <TextField
         variant="outlined"
         type="email"
         label="Enter email"
+        InputLabelProps={{
+            style: {
+                color: theme.title
+            } }}
+        InputProps={{
+            style:{
+                color: theme.title,
+            }
+        }
+        }
         onChange={(e)=> setEmail(e.target.value)}>
 
         </TextField>
@@ -48,6 +106,16 @@ const SignUpForm = ({handleClose}) => {
         variant="outlined"
         type="password"
         label="Enter Password"
+        InputLabelProps={{
+            style: {
+                color: theme.title
+            } }}
+        InputProps={{
+            style:{
+                color: theme.title,
+            }
+        }
+        }
         onChange={(e)=> setPassword(e.target.value)}>
 
         </TextField>
@@ -55,6 +123,16 @@ const SignUpForm = ({handleClose}) => {
         variant="outlined"
         type="password"
         label="Confirm Password"
+        InputLabelProps={{
+            style: {
+                color: theme.title
+            } }}
+        InputProps={{
+            style:{
+                color: theme.title,
+            }
+        }
+        }
         onChange={(e)=> setConfirmPassword(e.target.value)}>
 
         </TextField>
@@ -62,7 +140,7 @@ const SignUpForm = ({handleClose}) => {
         <Button
         variant="contained"
         size="large"
-        style={{backgroundColor:"red"}}
+        style={{backgroundColor:theme.title, color:theme.background}}
         onClick = {handleSubmit}>
             Sign Up
 

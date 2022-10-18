@@ -127,8 +127,17 @@ body{
 }
 
 .left-stats{
+    // padding-left:30px;
+    // padding-right:30px;
+    // padding-top:30px;
     padding:30px;
     width:30%;
+}
+
+.stats{
+    height:80%;
+    padding-bottom:1rem;
+    color:#fff;
 }
 
 .title{
@@ -143,6 +152,11 @@ body{
 
 .right-stats{
     width:70%;
+}
+
+
+.graph{
+    height:80%;
 }
 
 .header{
@@ -172,6 +186,18 @@ body{
     color: black,
     min-width: 90px
 }
+
+.reset-btn{
+    display:block;
+    margin:auto;
+    transform: scale(1.5);
+}
+.reset-btn:hover{
+    background: ${ ({theme})=> theme.typeBoxText };
+
+}
+
+
 
 `;
 

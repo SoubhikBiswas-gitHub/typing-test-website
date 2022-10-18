@@ -185,7 +185,7 @@ const TypingBox = (props) => {
                 allSpans[currCharIndex-1].className = allSpans[currCharIndex-1].className.replace("right","");
             }
             else{
-                allSpans[currCharIndex].className = allSpans[currCharIndex-1].className.replace("current","");
+                allSpans[currCharIndex].className = allSpans[currCharIndex].className.replace("current","");
             }
 
 
@@ -313,7 +313,7 @@ const TypingBox = (props) => {
 
   return (
     <div>
-            {/* <CapsLockWarning open={capsLocked}/> */}
+            <CapsLockWarning open={capsLocked}/>
             <UpperMenu countDown={countDown}/>
 
           {!testOver ? (<div className="type-box" onClick={focusInput}>
@@ -337,7 +337,9 @@ const TypingBox = (props) => {
                         incorrectChars={incorrectChar} 
                         extraChars={extraChar} 
                         missedChars={missedChar} 
-                        graphData={graphData}/>)}
+                        graphData={graphData}
+                        reset={resetGame}/>)
+                       }
 
         
 

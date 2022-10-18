@@ -27,11 +27,20 @@ const bentoTheme = {
     stats: "#FF7A90"
 }
 
+const futureFunkTheme = {
+    label: "Future Funk",
+    background: "#2E1A47",
+    title: "#fff",
+    typeBoxText: "#C18FFF",
+    stats: "#fff"
+}
+
 export const themeOptions = [
     {value: darkTheme, label:"Dark"},
     {value: lightTheme, label: "Light"},
     {value: redTheme, label:"Red Theme"},
-    {value: bentoTheme, label: "Bento"}
+    {value: bentoTheme, label: "Bento"},
+    {value: futureFunkTheme, label: "Future Funk"}
 ];
 
 
