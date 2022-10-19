@@ -21,7 +21,7 @@ body{
     padding:0;
     margin:0;
     transition: all 0.25s linear;
-    overflow-y: scroll;
+    overflow-y: scroll; 
 }
 
 body::-webkit-scrollbar {
@@ -104,16 +104,16 @@ body::-webkit-scrollbar {
     color: ${ ({theme})=> theme.typeBoxText}
 }
 
-.time-mode{
+.time-mode, .word-mode{
     display: flex;
 }
 
-.time{
+.time, .no-of-words{
     font-size: 20px;
     margin-right: 15px;
 }
 
-.time:hover{
+.time:hover, .no-of-words:hover{
     color:${ ({theme})=> theme.title };
     cursor:pointer;
 }
@@ -177,12 +177,32 @@ body::-webkit-scrollbar {
 
 .footer{
     display: flex;
+    flex-direction: column;
     width: 1000px;
     height: 60px;
     margin-left: auto;
     margin-right: auto;
     align-self: end;
+    align-items: center;
+}
+
+.actual-footer{
+    display:flex;
     justify-content: space-between;
+    width: 1000px;
+}
+
+.hint{
+    kbd{
+        background-color: ${ ({theme})=> theme.title };
+        color: ${ ({theme})=> theme.background };
+        padding: 2.5px 5px;
+        border-radius: 3px;
+    }
+}
+
+.instruction{
+    color: ${ ({theme})=> theme.title };
 }
 
 .theme-options{
@@ -274,6 +294,13 @@ a{
     color: inherit; 
     text-decoration: none;
 } 
+
+.mode:hover{
+    color: ${ ({theme})=> theme.title };
+    border-right-color: ${ ({theme})=> theme.typeBoxText };
+    cursor: pointer;
+}
+
 `;
 
 export default GlobalStyles;

@@ -10,6 +10,7 @@ var randomWords = require('random-words');
 const TypingBox = (props) => {
     console.log(props);
 
+    const {gameTime, gameWords, gameMode} = useGameMode();
     const [currWordIndex, setCurrWordIndex] = useState(0);
     const [currCharIndex, setCurrCharIndex] = useState(0);
     const [countDown, setCountDown] = useState(5);
@@ -24,6 +25,9 @@ const TypingBox = (props) => {
     const [graphData, setGraphData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [wordsArray, setWordsArray] = useState(()=>{
+        if(gameMode==='words'){
+            return randomWords(gameWords);
+        }
         return randomWords(50);
     });
     const [intervalId,setIntervalId] = useState(null);
@@ -35,7 +39,7 @@ const TypingBox = (props) => {
         return Array(words.length).fill(0).map(i=>createRef());
     }, [words]);
     
-    const {gameTime} = useGameMode();
+    
 
     const handleDialogEvents = (e)=>{
         
@@ -82,8 +86,15 @@ const TypingBox = (props) => {
         setTestStart(false);
         setTestOver(false);
         clearInterval(intervalId);
-        let random = randomWords(50);
-        setWordsArray(random);
+        if(gameMode==='words'){
+            let random = randomWords(Number(gameWords));
+            setWordsArray(random);
+            setCountDown(180);
+        }
+        else{
+            let random = randomWords(50);
+            setWordsArray(random);
+        }
         setCorrectChar(0);
         setInCorrectChar(0);
         setCorrectWords(0);
@@ -95,7 +106,8 @@ const TypingBox = (props) => {
 
     useEffect(()=>{
         resetGame();
-    },[gameTime]);
+        console.log("running");
+    },[gameTime,gameMode,gameWords]);
 
     // const wordSpanRef = Array(words.length).fill(0).map(i=>createRef());
 
@@ -118,7 +130,9 @@ const TypingBox = (props) => {
                 setCorrectChar((correctChar)=>{
                     console.log("correctchar",correctChar);
                     setGraphData((data)=>{
-                        return [...data,[gameTime-prevCountDown,Math.round((correctChar/5)/((gameTime-prevCountDown+1)/60))]];
+                        
+                        const startTime = (gameMode==='words')?180:gameTime
+                        return [...data,[startTime-prevCountDown,Math.round((correctChar/5)/((startTime-prevCountDown+1)/60))]];
                     })
                     return correctChar;
                 });
@@ -139,7 +153,7 @@ const TypingBox = (props) => {
     }
 
     const calculateWPM = ()=>{
-        return Math.round((correctChar/5)/(gameTime/60));
+        return Math.round((correctChar/5)/((graphData[graphData.length-1][0]+1)/60));
     }
 
     const calculateAccuracy = ()=>{
@@ -175,6 +189,13 @@ const TypingBox = (props) => {
         // logic for space
         if(e.keyCode===32){
 
+            //game over logic for word mode
+            if(currWordIndex===wordsArray.length-1){
+                clearInterval(intervalId);
+                setTestOver(true);  
+                return;   
+            }
+
             const correctChar = wordSpanRef[currWordIndex].current.querySelectorAll('.correct');
             const incorrectChar = wordSpanRef[currWordIndex].current.querySelectorAll('.incorrect');
             setMissedChar(missedChar+ (allSpans.length-incorrectChar.length-correctChar.length));
@@ -201,7 +222,7 @@ const TypingBox = (props) => {
         if(e.keyCode===8){
 
             if(currCharIndex!==0){
-
+        
                 if(currCharIndex===allSpans.length){
                     if(allSpans[currCharIndex-1].className.includes("extra")){
                         allSpans[currCharIndex-1].remove();
@@ -352,17 +373,26 @@ const TypingBox = (props) => {
             />
 
         <Dialog
+            PaperProps={{
+                style: {
+                    backgroundColor: "transparent",
+                    boxShadow: "none"
+                }
+            }}
+            style={{
+                backdropFilter: 'blur(2px)'
+            }}
             open={openDialog}
             onKeyDown={handleDialogEvents}
         >
             <DialogTitle>
-                <div>
+                <div className='instruction'>
                     press Space to redo
                 </div>
-                <div>
+                <div className='instruction'>
                     press Tab/Enter to restart
                 </div>
-                <div>
+                <div className='instruction'>
                     press any other key to exit
                 </div>
             </DialogTitle>
